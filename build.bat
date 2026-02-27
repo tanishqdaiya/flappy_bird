@@ -11,7 +11,7 @@ set OBJDIR=%OUTDIR%\obj
 if not exist "%OUTDIR%" mkdir "%OUTDIR%"
 if not exist "%OBJDIR%" mkdir "%OBJDIR%"
 
-set CFLAGS=/nologo /W3 /Zi /O2 /MD
+set CFLAGS=/nologo /W3 /Zi /O2 /MD /DMODE_PROD
 set INCLUDES=/I"%ROOTDIR%lib\raylib\include"
 set LIBDIR=/LIBPATH:"%ROOTDIR%lib\raylib\lib"
 set LIBS=raylib.lib kernel32.lib user32.lib gdi32.lib winmm.lib shell32.lib opengl32.lib advapi32.lib

@@ -10,3 +10,6 @@
 
 #define DESIGN_WIDTH 320
 #define DESIGN_HEIGHT 180
+
+#define HITBOX_DX 3
+#define HITBOX_DY 5

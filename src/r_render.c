@@ -73,9 +73,13 @@ void R_DrawBird (void)
 
     bird = P_GetBird ();
     DrawTexturePro (r_birdtexture,
-                    U_SpriteRect(0, 0),
+                    (Rectangle){ 0, 0, 16, 16 },
                     (Rectangle){ (int)DESIGN_WIDTH/4, (int)bird->y, 20, 20 },
                     (Vector2){ 0, 0 }, 0.0f, WHITE);
+
+#ifndef MODE_PROD
+    DrawRectangleLines ((int)DESIGN_WIDTH/4 + HITBOX_DX, (int)bird->y + HITBOX_DY, 20 - 2*HITBOX_DX, 20 - 2*HITBOX_DY, GREEN);
+#endif
 }
 
 void R_DrawGameOver (void)

@@ -11,7 +11,7 @@ static pipe_t g_pipes[PIPECOUNT];
 
 void P_Reset (void)
 {
-    int i, randomy, randomgap;
+    int i;
     
     g_bird.y = DESIGN_HEIGHT/2;
     g_bird.velocity = 0.0f;
@@ -19,11 +19,9 @@ void P_Reset (void)
 
     for (i = 0; i < PIPECOUNT; ++i)
     {
-        randomy = (rand () % 100) + 40;
-        randomgap = (rand () % 60) + 40;
         g_pipes[i].x = 200 + i*120;
-        g_pipes[i].y = randomy;
-        g_pipes[i].gap = randomgap;
+        g_pipes[i].y = (rand () % 100) + 40;
+        g_pipes[i].gap = (rand () % 60) + 40;
     }
 }
 
@@ -32,7 +30,6 @@ const bird_t *P_GetBird (void)
     return &g_bird;
 }
 
-/* Testing pending... */
 static bool P_CheckCollisionRR (Rectangle r1, Rectangle r2)
 {
     if (r1.x + r1.width >= r2.x
@@ -53,7 +50,8 @@ static bool P_CheckCollision (void)
     bird = P_GetBird ();
     pipes = P_GetPipes ();
 
-    birdrect = (Rectangle){ (int)DESIGN_WIDTH/4, (int)bird->y, 20, 20 };
+    birdrect = (Rectangle){ DESIGN_WIDTH/4 + HITBOX_DX,
+        bird->y + HITBOX_DY, 20 - 2*HITBOX_DX, 20 - 2*HITBOX_DY };
     
     for (i = 0; i < PIPECOUNT; ++i)
     {
@@ -72,8 +70,6 @@ static bool P_CheckCollision (void)
 
 void P_UpdateBird (float dt)
 {
-    int i;
-    
     if (!g_bird.alive)
     {
         G_RequestStateChange (GAME_OVER);
@@ -86,11 +82,7 @@ void P_UpdateBird (float dt)
     if (IsKeyPressed (KEY_SPACE))
         g_bird.velocity = -BIRD_JUMP_VELOCITY;
 
-    for (i = 0; i < PIPECOUNT; ++i)
-        P_CheckCollision ();
-
-    /* @Todo add bird hitting pipe */
-    if (g_bird.y >= DESIGN_HEIGHT || g_bird.y <= 0 || P_CheckCollision ())
+    if (g_bird.y + HITBOX_DY >= DESIGN_HEIGHT || g_bird.y + HITBOX_DY <= 0 || P_CheckCollision ())
         g_bird.alive = false;
 }
 
@@ -108,6 +100,7 @@ const pipe_t *P_GetPipes (void)
     return g_pipes;
 }
 
+/* @Fix pipe logic still looks like shit */
 void P_UpdatePipes (float dt)
 {
     int i;
@@ -117,6 +110,10 @@ void P_UpdatePipes (float dt)
         g_pipes[i].x -= PIPESPEED*dt;
 
         if (g_pipes[i].x + PIPE_WIDTH < 0)
-            g_pipes[i].x = 200 + PIPECOUNT*120;
+        {
+            g_pipes[i].x = PIPECOUNT * 120.0f;
+            g_pipes[i].y   = (rand() % 100) + 40;
+            g_pipes[i].gap = (rand() % 60) + 40;
+        }
      }
 }
