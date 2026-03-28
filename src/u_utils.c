@@ -1,14 +1,18 @@
-#include "raylib.h"
+#include <stdint.h>
 
-#define SPRITE_W 16
-#define SPRITE_H 16
+#define FNV_PRIME_32 0x01000193U
+#define FNV_OFFSET_BASIS_32 0x811C9DC5U
 
-Rectangle U_SpriteRect(int row, int col)
+uint32_t U_Hash(const void* data, size_t size)
 {
-    return (Rectangle){
-        col * SPRITE_W,
-        row * SPRITE_H,
-        SPRITE_W,
-        SPRITE_H
-    };
+    uint32_t hash;
+    unsigned char *byte;
+    
+    hash = FNV_OFFSET_BASIS_32;
+    byte = (unsigned char*)data;
+    for (size_t i = 0; i < size; ++i) {
+        hash ^= byte[i];
+        hash *= FNV_PRIME_32;
+    }
+    return hash;
 }
