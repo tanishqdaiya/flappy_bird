@@ -1,4 +1,4 @@
 #pragma once
+#include <stdint.h>
 
-#include "raylib.h"
-Rectangle U_SpriteRect(int row, int col);
+uint32_t U_Hash(const void* data, size_t size);

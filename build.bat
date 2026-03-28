@@ -21,7 +21,9 @@ set SOURCES= ^
     g_game.c ^
     r_render.c ^
     p_play.c ^
-    u_utils.c
+    u_utils.c ^
+    m_memory.c ^
+    i_interface.c
 
 echo Compiling...
 for %%f in (%SOURCES%) do (
