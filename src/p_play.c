@@ -5,6 +5,7 @@
 #include "config.h"
 #include "p_play.h"
 #include "g_game.h"
+#include "i_interface.h"
 
 static bird_t g_bird;
 static pipe_t g_pipes[PIPECOUNT];
@@ -70,17 +71,23 @@ static bool P_CheckCollision (void)
 
 void P_UpdateBird (float dt)
 {
+    float gravity;
+    float jump_velocity;
+    
     if (!g_bird.alive)
     {
         G_RequestStateChange (GAME_OVER);
         return;
     }
+
+    gravity = I_ConfigGetFloat("GRAVITY");
+    jump_velocity = I_ConfigGetFloat("BIRD_JUMP_VELOCITY");
     
     g_bird.y += g_bird.velocity*dt;
-    g_bird.velocity += GRAVITY*dt;
+    g_bird.velocity += gravity*dt;
 
     if (IsKeyPressed (KEY_SPACE))
-        g_bird.velocity = -BIRD_JUMP_VELOCITY;
+        g_bird.velocity = -jump_velocity;
 
     if (g_bird.y + HITBOX_DY >= DESIGN_HEIGHT || g_bird.y + HITBOX_DY <= 0 || P_CheckCollision ())
         g_bird.alive = false;
@@ -103,15 +110,26 @@ const pipe_t *P_GetPipes (void)
 /* @Fix pipe logic still looks like shit */
 void P_UpdatePipes (float dt)
 {
-    int i;
+    int i, j;
+    float speed, spacing, max_x;
 
+    speed = I_ConfigGetFloat("PIPESPEED");
+    spacing = I_ConfigGetFloat("PIPESPACING");
     for (i = 0; i < PIPECOUNT; ++i)
     {
-        g_pipes[i].x -= PIPESPEED*dt;
+        g_pipes[i].x -= speed*dt;
 
         if (g_pipes[i].x + PIPE_WIDTH < 0)
         {
-            g_pipes[i].x = PIPECOUNT * 120.0f;
+            max_x = 0;
+            for (j = 0; j < PIPECOUNT; ++j)
+            {
+                if (g_pipes[j].x > max_x)
+                    max_x = g_pipes[j].x;
+            }
+            
+            g_pipes[i].x = max_x + spacing;
+            
             g_pipes[i].y   = (rand() % 100) + 40;
             g_pipes[i].gap = (rand() % 60) + 40;
         }
