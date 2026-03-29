@@ -2,7 +2,8 @@
 
 typedef enum {
     GAME_PLAYING,
-    GAME_OVER
+    GAME_OVER,
+    GAME_PAUSED
 } gamestate;
 
 extern gamestate g_gamestate;

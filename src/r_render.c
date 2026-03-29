@@ -89,6 +89,13 @@ void R_DrawGameOver (void)
               (int)DESIGN_HEIGHT/4 + 20, 10, WHITE);
 }
 
+void R_DrawPaused (void)
+{
+    DrawText ("Paused", (int)DESIGN_WIDTH/6, (int)DESIGN_HEIGHT/4, 20, WHITE);
+    DrawText ("Press 'esc' to resume", (int)DESIGN_WIDTH/6,
+              (int)DESIGN_HEIGHT/4 + 20, 10, WHITE);
+}
+
 void R_DrawPipes (void)
 {
     int i;

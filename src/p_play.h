@@ -16,5 +16,6 @@ void P_Reset (void);
 const bird_t *P_GetBird (void);
 void P_UpdateBird (float dt);
 void P_HandleGameOver (void);
+void P_HandlePaused (void);
 const pipe_t *P_GetPipes (void);
 void P_UpdatePipes (float dt);
