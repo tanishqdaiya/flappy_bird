@@ -31,6 +31,8 @@ int main (int argc, char **argv)
     InitWindow (800, 450, "Flappy Bird");
     SetWindowState (FLAG_WINDOW_RESIZABLE);
 
+    SetExitKey(KEY_NULL);
+
     R_Init();
     P_Reset();
     

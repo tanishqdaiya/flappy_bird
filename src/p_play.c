@@ -102,6 +102,12 @@ void P_HandleGameOver (void)
     }
 }
 
+void P_HandlePaused (void)
+{
+    if (IsKeyPressed (KEY_ESCAPE))
+        G_RequestStateChange (GAME_PLAYING);
+}
+
 const pipe_t *P_GetPipes (void)
 {
     return g_pipes;

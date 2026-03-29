@@ -8,4 +8,5 @@ void R_UpdateCamera (Camera2D *camera);
 void R_DrawBackground (void);
 void R_DrawBird (void);
 void R_DrawGameOver (void);
+void R_DrawPaused (void);
 void R_DrawPipes (void);
