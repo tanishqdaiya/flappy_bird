@@ -23,7 +23,8 @@ set SOURCES= ^
     p_play.c ^
     u_utils.c ^
     m_memory.c ^
-    i_interface.c
+    i_interface.c ^
+    ui_menu.c
 
 echo Compiling...
 for %%f in (%SOURCES%) do (

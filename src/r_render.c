@@ -56,7 +56,9 @@ void R_Init (void)
 
 void R_Shutdown (void)
 {
-    UnloadTexture(r_bgtexture);
+    UnloadTexture (r_bgtexture);
+    UnloadTexture (r_birdtexture);
+    UnloadTexture (r_pipetexture);
 }
 
 void R_DrawBackground (void)

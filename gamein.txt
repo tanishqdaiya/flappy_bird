@@ -1,5 +1,15 @@
-BIRD_JUMP_VELOCITY=60
-GRAVITY=100
-PIPECOUNT=4
-PIPESPEED=20
-PIPESPACING=120
+;; I need to fix these
+BIRD_JUMP_VELOCITY = 60
+GRAVITY		   = 100
+PIPECOUNT	   = 4
+PIPESPEED	   = 20
+PIPESPACING	   = 120
+
+; UI Layout Constants
+ui_sb_width	  = 110
+ui_sb_margin	  = 10
+ui_pause_y	  = 20
+ui_pause_size	  = 20
+ui_option_y	  = 60
+ui_option_spacing = 20
+ui_option_size    = 10

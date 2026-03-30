@@ -1,6 +1,7 @@
 #include "g_game.h"
 #include "r_render.h"
 #include "p_play.h"
+#include "ui_menu.h"
 
 gamestate g_gamestate = GAME_PLAYING;
 gamestate g_upcomingstate = GAME_PLAYING;
@@ -22,7 +23,7 @@ static void G_ApplyStateChange (void)
 
     switch (g_gamestate) {
     case GAME_PLAYING:
-        if (oldstate == GAME_OVER)
+        if (oldstate != GAME_PAUSED)
             P_Reset ();
         break;
 
@@ -59,7 +60,11 @@ void G_Update (float dt)
         P_HandleGameOver ();
         break;
     case GAME_PAUSED:
-        P_HandlePaused ();
+        ui_action_t action = UI_UpdatePause ();
+        if (action == UI_ACTION_RESUME)
+            G_RequestStateChange (GAME_PLAYING);
+        else if (action == UI_ACTION_MENU)
+            G_RequestStateChange (GAME_PLAYING); /* @todo: change to game menu*/
         break;
     }
 }
@@ -82,7 +87,7 @@ void G_Draw (void)
         R_DrawBackground ();
         R_DrawBird ();
         R_DrawPipes ();
-        R_DrawPaused ();
+        UI_DrawPause ();
         break;
     }
 }
