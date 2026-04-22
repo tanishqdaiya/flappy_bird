@@ -8,3 +8,4 @@ typedef enum {
 
 ui_action_t UI_UpdatePause (void);
 void UI_DrawPause (void);
+void UI_DrawMainMenu (void);

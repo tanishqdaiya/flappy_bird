@@ -3,8 +3,11 @@
 #include "p_play.h"
 #include "ui_menu.h"
 
-gamestate g_gamestate = GAME_PLAYING;
-gamestate g_upcomingstate = GAME_PLAYING;
+//gamestate g_gamestate = GAME_PLAYING;
+//gamestate g_upcomingstate = GAME_PLAYING;
+
+gamestate g_gamestate = GAME_MENU;
+gamestate g_upcomingstate = GAME_MENU;
 
 void G_RequestStateChange (gamestate state)
 {
@@ -33,6 +36,9 @@ static void G_ApplyStateChange (void)
     case GAME_PAUSED:
         break;
 
+    case GAME_MENU:
+        break;
+
     default:
         break;
     }
@@ -50,7 +56,7 @@ void G_Update (float dt)
         else if (g_gamestate == GAME_PAUSED)
             G_RequestStateChange (GAME_PLAYING);
     }
-    
+
     switch(g_gamestate) {
     case GAME_PLAYING:
         P_UpdateBird (dt);
@@ -64,7 +70,11 @@ void G_Update (float dt)
         if (action == UI_ACTION_RESUME)
             G_RequestStateChange (GAME_PLAYING);
         else if (action == UI_ACTION_MENU)
-            G_RequestStateChange (GAME_PLAYING); /* @todo: change to game menu*/
+            G_RequestStateChange (GAME_MENU);
+        break;
+    case GAME_MENU:
+        if (IsKeyPressed (KEY_ENTER))
+            G_RequestStateChange (GAME_PLAYING);
         break;
     }
 }
@@ -76,18 +86,23 @@ void G_Draw (void)
         R_DrawBackground ();
         R_DrawBird ();
         R_DrawPipes ();
+        R_DrawHUD ();
         break;
     case GAME_OVER:
         R_DrawBackground ();
         R_DrawBird ();
         R_DrawPipes ();
+        R_DrawHUD ();
         R_DrawGameOver ();
         break;
     case GAME_PAUSED:
         R_DrawBackground ();
         R_DrawBird ();
         R_DrawPipes ();
+        R_DrawHUD ();
         UI_DrawPause ();
         break;
+    case GAME_MENU:
+        UI_DrawMainMenu ();
     }
 }

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "config.h"
 #include "u_utils.h"
 #include "r_render.h"
@@ -84,11 +86,22 @@ void R_DrawBird (void)
 #endif
 }
 
+static void R_DrawTextCentered (const char *text, float y, int fontsize, Color color)
+{
+    float x;
+    Vector2 textsize;
+
+    textsize = MeasureTextEx(GetFontDefault(), text, (float)fontsize, (float)fontsize/10);
+    x = (DESIGN_WIDTH - textsize.x) / 2.0f;
+    DrawText(text, (int)x, (int)y, fontsize, color);
+}
+
 void R_DrawGameOver (void)
 {
-    DrawText ("Game Over", (int)DESIGN_WIDTH/6, (int)DESIGN_HEIGHT/4, 20, WHITE);
-    DrawText ("Press 'r' to play again", (int)DESIGN_WIDTH/6,
-              (int)DESIGN_HEIGHT/4 + 20, 10, WHITE);
+    DrawRectangle (0, 0, DESIGN_WIDTH, DESIGN_HEIGHT, (Color){ 0, 0, 0, 180 });
+    
+    R_DrawTextCentered ("GAME OVER", (int)DESIGN_HEIGHT/4, 20, WHITE);
+    R_DrawTextCentered ("Press 'r' to play again", (int)DESIGN_HEIGHT/4 + 20, 10, WHITE);
 }
 
 void R_DrawPaused (void)
@@ -122,4 +135,20 @@ void R_DrawPipes (void)
                         (Vector2){ 0, 0 },
                         0.0f, WHITE);
     }
+}
+
+void R_DrawHUD ()
+{
+    int score, high, yoffset;
+    char scorebuf[16], highbuf[16];
+
+    score = P_GetScore();
+    high  = P_GetHighScore();
+    yoffset  = 10;
+
+    snprintf(scorebuf, sizeof(scorebuf), "SCORE: %d", score);
+    snprintf(highbuf, sizeof(highbuf), "BEST: %d", high);
+
+    DrawText(scorebuf, DESIGN_WIDTH - 60, yoffset, 10, RAYWHITE);
+    DrawText(highbuf, DESIGN_WIDTH - 60, yoffset + 12, 10, GRAY);
 }
