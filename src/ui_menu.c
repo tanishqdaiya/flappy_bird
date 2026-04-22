@@ -65,3 +65,20 @@ void UI_DrawPause (void)
             DrawText (ui_options[i], sb_m + 12, (int)current_opt_y, opt_size, c);
     }
 }
+
+static void UI_DrawTextCentered (const char *text, float y, int fontsize, Color color)
+{
+    float x;
+    Vector2 textsize;
+
+    textsize = MeasureTextEx(GetFontDefault(), text, (float)fontsize, (float)fontsize/10);
+    x = (DESIGN_WIDTH - textsize.x) / 2.0f;
+    DrawText(text, (int)x, (int)y, fontsize, color);
+}
+
+void UI_DrawMainMenu (void)
+{    
+    DrawRectangle (0, 0, DESIGN_WIDTH, DESIGN_HEIGHT, (Color){ 20, 20, 20, 255 });
+    UI_DrawTextCentered ("FLAPPY C", 60, 24, YELLOW);
+    UI_DrawTextCentered ("PRESS [ENTER] TO START", 110, 10, RAYWHITE);
+}

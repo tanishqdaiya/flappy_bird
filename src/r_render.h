@@ -10,3 +10,4 @@ void R_DrawBird (void);
 void R_DrawGameOver (void);
 void R_DrawPaused (void);
 void R_DrawPipes (void);
+void R_DrawHUD (void);

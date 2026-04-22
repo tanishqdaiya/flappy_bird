@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "raylib.h"
 
@@ -10,6 +11,9 @@
 static bird_t g_bird;
 static pipe_t g_pipes[PIPECOUNT];
 
+static int g_score;
+static int g_highscore;
+
 void P_Reset (void)
 {
     int i;
@@ -18,17 +22,33 @@ void P_Reset (void)
     g_bird.velocity = 0.0f;
     g_bird.alive = true;
 
+    g_score = 0;
+    // g_highscore = ReadHighScoreFromSomeFile();
+    if (g_score > g_highscore) /* write high score to file*/
+        ;
+
     for (i = 0; i < PIPECOUNT; ++i)
     {
         g_pipes[i].x = 200 + i*120;
         g_pipes[i].y = (rand () % 100) + 40;
         g_pipes[i].gap = (rand () % 60) + 40;
+        g_pipes[i].passed = false;
     }
 }
 
 const bird_t *P_GetBird (void)
 {
     return &g_bird;
+}
+
+int P_GetScore (void)
+{
+    return g_score;
+}
+
+int P_GetHighScore (void)
+{
+    return g_highscore;
 }
 
 static bool P_CheckCollisionRR (Rectangle r1, Rectangle r2)
@@ -118,12 +138,19 @@ void P_UpdatePipes (float dt)
 {
     int i, j;
     float speed, spacing, max_x;
+    int birdx;
 
     speed = I_ConfigGetFloat("PIPESPEED");
     spacing = I_ConfigGetFloat("PIPESPACING");
     for (i = 0; i < PIPECOUNT; ++i)
     {
         g_pipes[i].x -= speed*dt;
+
+        birdx = DESIGN_WIDTH/4 + HITBOX_DX; /* can be abstracted away but fine for the project scope */
+        if (!g_pipes[i].passed && (birdx > g_pipes[i].x + PIPE_WIDTH)) {
+            ++g_score;
+            g_pipes[i].passed = true;
+        }
 
         if (g_pipes[i].x + PIPE_WIDTH < 0)
         {
@@ -138,6 +165,7 @@ void P_UpdatePipes (float dt)
             
             g_pipes[i].y   = (rand() % 100) + 40;
             g_pipes[i].gap = (rand() % 60) + 40;
+            g_pipes[i].passed = false; /* bad way to implement it but I'd rather live with it */
         }
      }
 }

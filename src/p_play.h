@@ -10,10 +10,13 @@ typedef struct bird_s {
 typedef struct pipe_s {
     float x, y;
     int gap;
+    bool passed;
 } pipe_t;
 
 void P_Reset (void);
 const bird_t *P_GetBird (void);
+int P_GetScore (void);
+int P_GetHighScore (void);
 void P_UpdateBird (float dt);
 void P_HandleGameOver (void);
 void P_HandlePaused (void);
